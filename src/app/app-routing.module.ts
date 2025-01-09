@@ -1,9 +1,9 @@
 import { Route, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 
-import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { HomepageComponent } from './homepage/homepage.component';
+import { UserComponent } from './user/user.component';
 
 const appRoutes: Route[] = [
   {
@@ -14,6 +14,10 @@ const appRoutes: Route[] = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'user',
+    component: UserComponent,
   },
 ];
 

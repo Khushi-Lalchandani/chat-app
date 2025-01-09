@@ -7,9 +7,10 @@ import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { HomepageComponent } from './homepage/homepage.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UserComponent } from './user/user.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, HomepageComponent],
+  declarations: [AppComponent, LoginComponent, HomepageComponent, UserComponent],
   imports: [
     BrowserModule,
     RouterModule,
