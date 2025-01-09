@@ -1,1 +1,89 @@
-<p>login works!</p>
+<div class="container login">
+  <div class="row">
+    <div class="col-md-6 col-xs-11 auth">
+      <form [formGroup]="form">
+        <div class="form-group" *ngIf="!isLoginMode">
+          <label>First Name:</label>
+          <input
+            formControlName="fname"
+            type="text"
+            placeholder="Enter your first name"
+            class="form-control"
+          />
+        </div>
+
+        <div class="form-group" *ngIf="!isLoginMode">
+          <label>Last Name:</label>
+          <input
+            formControlName="lname"
+            type="text"
+            placeholder="Enter your last name"
+            class="form-control"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Email:</label>
+          <input
+            formControlName="email"
+            type="email"
+            placeholder="Enter your email"
+            class="form-control"
+          />
+        </div>
+        <p
+          class="help-group"
+          *ngIf="form.get('email')?.touched && !form.get('email')?.valid"
+        >
+          Enter email
+        </p>
+        <div class="form-group password-container">
+          <label>Password:</label>
+          <input
+            formControlName="password"
+            [type]="isPasswordVisible ? 'text' : 'password'"
+            placeholder="Enter your Password"
+            class="form-control"
+          />
+          <div type="button">
+            <i
+              [ngClass]="
+                isPasswordVisible
+                  ? 'fa-solid fa-eye'
+                  : '  fa-solid fa-eye-slash'
+              "
+            ></i>
+          </div>
+        </div>
+        <p
+          class="help-group"
+          *ngIf="form.get('password')?.touched && !form.get('password')?.valid"
+        >
+          Enter password
+        </p>
+        <div class="help-group" *ngIf="error">
+          {{ error }}
+        </div>
+        <hr />
+        <div>
+          <button
+            class="btn btn-primary"
+            type="submit"
+            [disabled]="!form.valid"
+            (click)="onSubmit()"
+          >
+            {{ isLoginMode ? "Login" : "Sign Up" }}
+          </button>
+          &nbsp;
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="onSwitchMode()"
+          >
+            Switch To {{ isLoginMode ? "Sign Up" : "Login" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
