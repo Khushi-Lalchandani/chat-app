@@ -7,6 +7,7 @@ import { map } from 'rxjs';
 export class AuthService {
   loggedIn: boolean = false;
   tokenExpirationTimer: any;
+
   signUp(user: {
     fname: string;
     lname: string;
