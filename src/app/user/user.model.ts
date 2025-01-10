@@ -1,11 +1,11 @@
-interface Message {
+export interface Message {
   name: string;
   message: string;
   email: string;
   time?: Date;
 }
 
-interface UserProfile {
+export interface UserProfile {
   name: string;
   email: string;
   sent: Message[];
