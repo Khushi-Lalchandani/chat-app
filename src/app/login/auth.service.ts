@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { map } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
+import { UserProfile } from '../user/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   loggedIn: boolean = false;
   tokenExpirationTimer: any;
+  userLoggedIn = new BehaviorSubject<any>(null);
 
   signUp(user: {
     fname: string;
@@ -27,21 +29,20 @@ export class AuthService {
     );
   }
   logInFirebase(user: { email: string; password: string }) {
-    return this.http
-      .post(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBeBysRqu5nJa_wSdI1OHFiXcN15dSBjZo',
-        user
-      )
-      .pipe(
-        map((response) => {
-          const expiresIn = 3600000;
+    return this.http.post(
+      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBeBysRqu5nJa_wSdI1OHFiXcN15dSBjZo',
+      user
+    );
+    // .pipe(
+    //   map((response) => {
+    //     const expiresIn = 3600000;
 
-          this.tokenExpirationTimer = setTimeout(() => {
-            this.logout();
-          }, expiresIn);
-          return response;
-        })
-      );
+    //     this.tokenExpirationTimer = setTimeout(() => {
+    //       this.logout();
+    //     }, expiresIn);
+    //     return response;
+    //   })
+    // );
   }
   getAllUsers() {
     return this.http.get('https://chitchat-28450-default-rtdb.firebaseio.com/');

@@ -1,7 +1,9 @@
+import { UserProfile } from './../user/user.model';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { AuthService } from './auth.service';
+import { UserService } from '../user/user.service';
 
 @Component({
   selector: 'app-login',
@@ -27,59 +29,26 @@ export class LoginComponent implements OnInit {
   }
   onSubmit() {
     console.log(this.form);
-    this.router.navigate(['/user']);
+    console.log(this.isLoginMode);
 
     const value = this.form.value;
 
     if (this.isLoginMode) {
-      this.authService
-        .logInFirebase({
-          email: value.email,
-          password: value.password,
-        })
-
-        .subscribe(
-          (data) => {
-            this.error = '';
-            this.authService.loggedIn = true;
-            this.router.navigate(['/blogs']);
-          },
-          (error) => {
-            this.error = error.error.error.message;
-            this.router.navigate(['/auth']);
-            console.log(error);
-          }
-        );
-    } else {
-      this.authService
-        .signUpFirebase({
-          email: value.email,
-          password: value.password,
-        })
-        .subscribe(
-          (data) => {
-            this.authService
-              .signUp({
-                fname: value.fname,
-                lname: value.lname,
-                email: value.email,
-                password: value.password,
-              })
-              .subscribe((sample) => {
-                console.log(sample, 'added successfully');
-                window.location.reload();
-              });
-          },
-          (error) => {
-            if (error) {
-              this.error = error.error.error.message;
-              console.log(this.error);
-            }
-          }
-        );
+      if (this.searchUser(value)) {
+        this.uService.nextUser.next(value);
+        console.log(value);
+        this.router.navigate(['/user'], { relativeTo: this.route });
+      }
     }
-    this.form.reset();
   }
-
-  constructor(private router: Router, private authService: AuthService) {}
+  searchUser(value: any) {
+    return this.uService.users.some(
+      (data) => data.email === value.email && data.password === value.password
+    );
+  }
+  constructor(
+    private router: Router,
+    private uService: UserService,
+    private route: ActivatedRoute
+  ) {}
 }
