@@ -3,6 +3,8 @@ export interface Message {
   message: string;
   email: string;
   time?: Date;
+  messageSent?: boolean;
+  messageReceived?: boolean;
 }
 
 export interface UserProfile {

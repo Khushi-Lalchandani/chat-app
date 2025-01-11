@@ -1,5 +1,41 @@
 <div class="chat_grid">
   <div class="chat_header">Conversation</div>
-  <div class="chat_chats"></div>
-  <div class="chat_window">Xyz</div>
+  <div class="chat_chats">
+    <div
+      class="chat_names"
+      *ngFor="let user of userDetails"
+      (click)="revealDetails(user)"
+    >
+      <div class="chat_names-img">
+        <img
+          [src]="user.profile_photo"
+          [alt]="user.name"
+          class="chat_names-img--img"
+        />
+      </div>
+      <div class="chat_names-details">
+        <p>{{ user.name }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="chat_window">
+    <div class="msgs" *ngIf="chatMessages && chatMessages.length > 0">
+      <div class="msg" *ngFor="let message of chatMessages">
+        <div
+          *ngIf="message.messageSent"
+          [ngClass]="message.messageSent ? 'sent' : 'received'"
+        >
+          <!-- Style for sent message -->
+          Sent: {{ message.message }}
+        </div>
+        <div
+          *ngIf="message.messageReceived"
+          [ngClass]="message.messageReceived ? 'received' : 'sent'"
+        >
+          <!-- Style for received message -->
+          Received: {{ message.message }}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
