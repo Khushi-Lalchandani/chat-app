@@ -2,6 +2,8 @@ import { BehaviorSubject } from 'rxjs';
 import { UserProfile } from './user.model';
 
 export class UserService {
+  url: string =
+    'https://cdn.vectorstock.com/i/1000v/66/13/default-avatar-profile-icon-social-media-user-vector-49816613.avif';
   users: UserProfile[] = [
     {
       name: 'Khushi',
@@ -72,8 +74,7 @@ export class UserService {
           time: new Date('January 10, 2025 10:04:30'),
         },
       ],
-      profile_photo:
-        'https://cdn.vectorstock.com/i/1000v/66/13/default-avatar-profile-icon-social-media-user-vector-49816613.avif',
+      profile_photo: this.url,
     },
     {
       name: 'Roshan',
@@ -113,8 +114,7 @@ export class UserService {
           time: new Date('January 10, 2025 10:00:00'),
         },
       ],
-      profile_photo:
-        'https://cdn.vectorstock.com/i/1000v/66/13/default-avatar-profile-icon-social-media-user-vector-49816613.avif',
+      profile_photo: this.url,
     },
     {
       name: 'Kajal',
@@ -129,8 +129,7 @@ export class UserService {
         },
       ],
       received: [],
-      profile_photo:
-        'https://cdn.vectorstock.com/i/1000v/66/13/default-avatar-profile-icon-social-media-user-vector-49816613.avif',
+      profile_photo: this.url,
     },
     {
       name: 'Ria',
@@ -158,8 +157,7 @@ export class UserService {
           time: new Date('January 10, 2025 10:08:30'),
         },
       ],
-      profile_photo:
-        'https://cdn.vectorstock.com/i/1000v/66/13/default-avatar-profile-icon-social-media-user-vector-49816613.avif',
+      profile_photo: this.url,
     },
     {
       name: 'John',
@@ -187,8 +185,7 @@ export class UserService {
           time: new Date('January 10, 2025 10:05:30'),
         },
       ],
-      profile_photo:
-        'https://cdn.vectorstock.com/i/1000v/66/13/default-avatar-profile-icon-social-media-user-vector-49816613.avif',
+      profile_photo: this.url,
     },
     {
       name: 'Manthan',
@@ -210,8 +207,7 @@ export class UserService {
           time: new Date('January 10, 2025 10:05:00'),
         },
       ],
-      profile_photo:
-        'https://cdn.vectorstock.com/i/1000v/66/13/default-avatar-profile-icon-social-media-user-vector-49816613.avif',
+      profile_photo: this.url,
     },
   ];
 

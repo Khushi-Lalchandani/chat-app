@@ -27,7 +27,6 @@
             message.messageSent ? 'messages_sent' : 'messages_received'
           "
         >
-          <!-- Style for sent message -->
           <span class="messages_received-text">{{ message.message }}</span>
           <span class="messages_received-help">{{
             message.time | date : "shortTime"
@@ -39,7 +38,6 @@
             message.messageReceived ? 'messages_received' : 'messages_sent'
           "
         >
-          <!-- Style for received message -->
           <span class="messages_received-text">{{ message.message }}</span>
           <span class="messages_received-help">{{
             message.time | date : "shortTime"
@@ -47,5 +45,20 @@
         </div>
       </div>
     </div>
+    <form
+      class="chat_send"
+      *ngIf="chatMessages"
+      [formGroup]="message_form"
+      (submit)="onSubmit()"
+    >
+      <input type="text" class="chat_send-input" formControlName="message" />
+      <button type="submit" class="chat_send-button">
+        <img
+          src="../../assets/imgs/icons8-send-30.png"
+          alt="Send"
+          class="chat_send-icon"
+        />
+      </button>
+    </form>
   </div>
 </div>

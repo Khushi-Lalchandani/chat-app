@@ -27,10 +27,17 @@
     overflow-y: scroll;
   }
   &_window {
-    grid-column: 2/-1;
+    grid-column: 2/3;
+    position: relative;
     padding: 2rem;
     background-color: #f4f1de;
     grid-row: 2/3;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   &_names {
@@ -53,14 +60,63 @@
     &-details {
     }
   }
+  &_send {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    margin-bottom: 1rem;
+
+    &-input {
+      width: 90%;
+      padding: 1rem;
+      border-radius: 20px;
+      border: 1px solid #ddd;
+
+      &:focus {
+        border: 1px solid #666;
+        outline: none;
+      }
+    }
+
+    &-icon {
+      height: 2rem;
+      width: 2rem;
+    }
+    &-button {
+      background-color: #fff;
+      border-radius: 50%;
+      border: 1px solid #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+
+      &:hover {
+        animation: animate infinite 0.4s;
+      }
+    }
+  }
 }
 
-.msg {
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
-}
+@keyframes animate {
+  0% {
+    rotate: -60deg;
+    transform: scale(1.1);
+  }
 
+  50% {
+    rotate: 0deg;
+    transform: scale(1);
+  }
+
+  100% {
+    rotate: -60deg;
+    transform: scale(1.1);
+  }
+}
 .messages {
   display: flex;
   flex-direction: column;
@@ -128,8 +184,4 @@
       top: 80%;
     }
   }
-}
-
-.received,
-.sent {
 }
