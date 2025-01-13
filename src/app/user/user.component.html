@@ -3,7 +3,7 @@
   <div class="chat_chats">
     <div
       class="chat_names"
-      *ngFor="let user of userDetails"
+      *ngFor="let user of showUsers"
       (click)="revealDetails(user)"
     >
       <div class="chat_names-img">
@@ -19,21 +19,31 @@
     </div>
   </div>
   <div class="chat_window">
-    <div class="msgs" *ngIf="chatMessages && chatMessages.length > 0">
-      <div class="msg" *ngFor="let message of chatMessages">
+    <div class="messages" *ngIf="chatMessages && chatMessages.length > 0">
+      <div class="messages_content" *ngFor="let message of chatMessages">
         <div
           *ngIf="message.messageSent"
-          [ngClass]="message.messageSent ? 'sent' : 'received'"
+          [ngClass]="
+            message.messageSent ? 'messages_sent' : 'messages_received'
+          "
         >
           <!-- Style for sent message -->
-          Sent: {{ message.message }}
+          <span class="messages_received-text">{{ message.message }}</span>
+          <span class="messages_received-help">{{
+            message.time | date : "shortTime"
+          }}</span>
         </div>
         <div
           *ngIf="message.messageReceived"
-          [ngClass]="message.messageReceived ? 'received' : 'sent'"
+          [ngClass]="
+            message.messageReceived ? 'messages_received' : 'messages_sent'
+          "
         >
           <!-- Style for received message -->
-          Received: {{ message.message }}
+          <span class="messages_received-text">{{ message.message }}</span>
+          <span class="messages_received-help">{{
+            message.time | date : "shortTime"
+          }}</span>
         </div>
       </div>
     </div>

@@ -9,28 +9,43 @@ import { Message, UserProfile } from './user.model';
 })
 export class UserComponent implements OnInit {
   userDetails!: UserProfile[];
-  sentMessages: any = [];
-  receivedMessages: any = [];
+  showUsers!: UserProfile[];
+  sentMessages: Message[] = [];
+
+  receivedMessages: Message[] = [];
   chatMessages!: Message[];
 
   ngOnInit(): void {
     this.uService.nextUser.subscribe((value) => {
-      console.log(value);
+      // console.log(value);
       if (this.uService.nextUser.value) {
         this.userDetails = this.uService.users.filter(
           (data) => data.email !== value.email
         );
+        this.showUsers = this.communicationHappened(this.userDetails);
       }
     });
+  }
 
-    // console.log(this.userDetails);
+  communicationHappened(user: UserProfile[]) {
+    return user.filter((user) => {
+      const hasSentMessage = user.sent.some(
+        (message) => message.email === this.uService.nextUser.value.email
+      );
+      const hasReceivedMessage = user.received.some(
+        (message) => message.email === this.uService.nextUser.value.email
+      );
+      return hasReceivedMessage || hasSentMessage;
+    });
   }
   revealDetails(user: UserProfile) {
-    console.log(user);
+    this.receivedMessages = [];
+    this.sentMessages = [];
 
     user.sent.forEach((data) => {
       if (data.email === this.uService.nextUser.value.email) {
         data.messageReceived = true;
+
         this.receivedMessages.push(data);
       }
     });
