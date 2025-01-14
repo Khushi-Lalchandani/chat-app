@@ -13,20 +13,21 @@ export class UserComponent implements OnInit {
   showUsers!: UserProfile[];
   sentMessages: Message[] = [];
   message_form!: FormGroup;
-
   receivedMessages: Message[] = [];
   chatMessages!: Message[];
   selectedUser!: UserProfile;
   currentUser!: UserProfile[];
+  mainUsers!: UserProfile[];
 
   ngOnInit(): void {
+    this.mainUsers = this.uService.users;
     this.uService.nextUser.subscribe((value) => {
       // console.log(value);
       if (this.uService.nextUser.value) {
-        this.currentUser = this.uService.users.filter(
+        this.currentUser = this.mainUsers.filter(
           (data) => data.email === value.email
         );
-        this.userDetails = this.uService.users.filter(
+        this.userDetails = this.mainUsers.filter(
           (data) => data.email !== value.email
         );
         this.showUsers = this.communicationHappened(this.userDetails);
@@ -82,27 +83,35 @@ export class UserComponent implements OnInit {
     this.message_form.reset();
   }
   appendMessage(message: string) {
-    this.uService.users.forEach((user) => {
+    const updatedUsers = this.mainUsers.map((user) => {
       if (user.email === this.currentUser[0].email) {
-        user.sent.push({
-          name: this.selectedUser.name,
-          message: message,
-          email: this.selectedUser.email,
-          time: new Date(),
-        });
+        user.sent = [
+          ...user.sent,
+          {
+            name: this.selectedUser.name,
+            message: message,
+            email: this.selectedUser.email,
+            time: new Date(),
+          },
+        ];
+
         console.log(user);
       }
       if (user.email === this.selectedUser.email) {
-        user.received.push({
-          name: this.currentUser[0].name,
-          message: message,
-          email: this.currentUser[0].email,
-          time: new Date(),
-        });
-        console.log(user);
+        user.received = [
+          ...user.received,
+          {
+            name: this.currentUser[0].name,
+            message: message,
+            email: this.currentUser[0].email,
+            time: new Date(),
+          },
+        ];
+        // console.log(user);
       }
-      this.cdrRef.detectChanges();
+      return user;
     });
+    this.mainUsers = [...updatedUsers];
   }
   constructor(
     private uService: UserService,

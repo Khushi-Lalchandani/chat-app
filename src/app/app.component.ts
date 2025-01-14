@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService } from './user/user.service';
+import { UserProfile } from './user/user.model';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +11,6 @@ import { Router } from '@angular/router';
 export class AppComponent {
   title = 'chat-app';
 
-  constructor(private router: Router) {}
+  user: UserProfile[] = this.uService.users;
+  constructor(private uService: UserService) {}
 }

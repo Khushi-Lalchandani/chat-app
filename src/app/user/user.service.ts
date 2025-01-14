@@ -4,6 +4,7 @@ import { UserProfile } from './user.model';
 export class UserService {
   url: string =
     'https://cdn.vectorstock.com/i/1000v/66/13/default-avatar-profile-icon-social-media-user-vector-49816613.avif';
+
   users: UserProfile[] = [
     {
       name: 'Khushi',
