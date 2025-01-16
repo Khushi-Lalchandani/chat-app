@@ -3,10 +3,13 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, map } from 'rxjs';
 
-export interface credentials {
+export interface returnType {
   email: string;
-  password: string;
+  idToken: string;
   returnSecureToken?: boolean;
+  localId: string;
+  expiresIn: string;
+  registered: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -15,35 +18,25 @@ export class AuthService {
   tokenExpirationTimer: any;
   userLoggedIn = new BehaviorSubject<any>(null);
 
-  signUpFirebase(user: {
-    email: string;
-    password: string;
-    returnSecureToken: boolean;
-  }) {
-    return this.http.post<credentials>(
+  signUpFirebase(
+    email: string,
+    password: string,
+    returnSecureToken: boolean = true
+  ) {
+    return this.http.post(
       'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDsil2lX3n2-JgW2td21LzqbN_bk7-SXac',
-      user
+      { email, password, returnSecureToken }
     );
   }
-  logInFirebase(user: {
-    email: string;
-    password: string;
-    returnSecureToken: boolean;
-  }) {
+  logInFirebase(
+    email: string,
+    password: string,
+    returnSecureToken: boolean = true
+  ) {
     return this.http.post(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBeBysRqu5nJa_wSdI1OHFiXcN15dSBjZo',
-      user
+      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDsil2lX3n2-JgW2td21LzqbN_bk7-SXac',
+      { email, password }
     );
-    // .pipe(
-    //   map((response) => {
-    //     const expiresIn = 3600000;
-
-    //     this.tokenExpirationTimer = setTimeout(() => {
-    //       this.logout();
-    //     }, expiresIn);
-    //     return response;
-    //   })
-    // );
   }
 
   private lStorage(): boolean {

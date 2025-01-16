@@ -1,6 +1,9 @@
 import { BehaviorSubject } from 'rxjs';
 import { UserProfile } from './user.model';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class UserService {
   url: string =
     'https://cdn.vectorstock.com/i/1000v/66/13/default-avatar-profile-icon-social-media-user-vector-49816613.avif';
@@ -9,7 +12,7 @@ export class UserService {
     {
       name: 'Khushi',
       email: 'kl@gmail.com',
-      password: 'Khushi1234',
+
       sent: [
         {
           name: 'Roshan',
@@ -80,7 +83,7 @@ export class UserService {
     {
       name: 'Roshan',
       email: 'rl@gmail.com',
-      password: 'Roshan1234',
+
       sent: [
         {
           name: 'Khushi',
@@ -120,7 +123,7 @@ export class UserService {
     {
       name: 'Kajal',
       email: 'kj@gmail.com',
-      password: 'Kajal1234',
+
       sent: [
         {
           name: 'Khushi',
@@ -135,7 +138,7 @@ export class UserService {
     {
       name: 'Ria',
       email: 'ria@gmail.com',
-      password: 'Ria1234',
+
       sent: [
         {
           name: 'Khushi',
@@ -163,7 +166,7 @@ export class UserService {
     {
       name: 'John',
       email: 'john@gmail.com',
-      password: 'John1234',
+
       sent: [
         {
           name: 'Khushi',
@@ -191,7 +194,7 @@ export class UserService {
     {
       name: 'Manthan',
       email: 'manthan@gmail.com',
-      password: 'Manthan1234',
+
       sent: [
         {
           name: 'Khushi',
@@ -214,12 +217,18 @@ export class UserService {
 
   nextUser = new BehaviorSubject<any>({
     email: 'kl@gmail.com',
-    password: 'Khushi1234',
   });
 
   setUser(value: any) {
     this.nextUser.next(value);
   }
 
-  constructor() {}
+  uploadData(user: UserProfile[]) {
+    return this.http.post(
+      'https://chitchat-28450-default-rtdb.firebaseio.com/.json',
+      user
+    );
+  }
+
+  constructor(private http: HttpClient) {}
 }

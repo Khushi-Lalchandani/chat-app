@@ -36,6 +36,9 @@ export class UserComponent implements OnInit {
     this.message_form = new FormGroup({
       message: new FormControl(null),
     });
+    // this.uService.uploadData(this.uService.users).subscribe(() => {
+    //   console.log('uploaded');
+    // });
   }
 
   communicationHappened(user: UserProfile[]) {
