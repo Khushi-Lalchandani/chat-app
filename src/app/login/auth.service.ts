@@ -52,5 +52,10 @@ export class AuthService {
     this.router.navigate(['/login']);
     localStorage.removeItem('isLoggedIn');
   }
+  nextUser = new BehaviorSubject<any>({ email: 'kl@gmail.com' });
+
+  setUser(value: any) {
+    this.nextUser.next(value);
+  }
   constructor(private http: HttpClient, private router: Router) {}
 }

@@ -30,20 +30,14 @@ export class LoginComponent implements OnInit {
 
     const value = this.form.value;
 
-    // if (this.isLoginMode) {
-    //   if (this.searchUser(value)) {
-    //     this.uService.nextUser.next(value);
-    //     console.log(value);
-    //     this.router.navigate(['/user'], { relativeTo: this.route });
-    //   }
-    // }
-
     if (this.isLoginMode) {
       this.authService
         .logInFirebase(value.email, value.password, true)
         .subscribe(
           (data) => {
             this.error = '';
+            this.authService.nextUser.next(value);
+
             this.authService.loggedIn = true;
             console.log('succesful', data);
             this.router.navigate(['/user'], { relativeTo: this.route });
@@ -62,6 +56,8 @@ export class LoginComponent implements OnInit {
             this.error = '';
             this.authService.loggedIn = true;
             console.log('signed up', data);
+            this.authService.nextUser.next(value);
+
             this.router.navigate(['/user'], { relativeTo: this.route });
           },
           (error) => {
@@ -71,9 +67,6 @@ export class LoginComponent implements OnInit {
         );
     }
     // this.form.reset();
-  }
-  searchUser(value: any) {
-    return this.uService.users.some((data) => data.email === value.email);
   }
   constructor(
     private router: Router,
