@@ -2,7 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, map } from 'rxjs';
-import { UserProfile } from '../user/user.model';
+
+export interface credentials {
+  email: string;
+  password: string;
+  returnSecureToken?: boolean;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -10,25 +15,21 @@ export class AuthService {
   tokenExpirationTimer: any;
   userLoggedIn = new BehaviorSubject<any>(null);
 
-  signUp(user: {
-    fname: string;
-    lname: string;
+  signUpFirebase(user: {
     email: string;
     password: string;
+    returnSecureToken: boolean;
   }) {
-    return this.http.post(
-      'https://chitchat-28450-default-rtdb.firebaseio.com/',
-      user
-    );
-  }
-
-  signUpFirebase(user: { email: string; password: string }) {
-    return this.http.post(
+    return this.http.post<credentials>(
       'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDsil2lX3n2-JgW2td21LzqbN_bk7-SXac',
       user
     );
   }
-  logInFirebase(user: { email: string; password: string }) {
+  logInFirebase(user: {
+    email: string;
+    password: string;
+    returnSecureToken: boolean;
+  }) {
     return this.http.post(
       'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBeBysRqu5nJa_wSdI1OHFiXcN15dSBjZo',
       user
@@ -44,9 +45,7 @@ export class AuthService {
     //   })
     // );
   }
-  getAllUsers() {
-    return this.http.get('https://chitchat-28450-default-rtdb.firebaseio.com/');
-  }
+
   private lStorage(): boolean {
     return localStorage.getItem('isLoggedIn') === 'true';
   }
@@ -57,7 +56,7 @@ export class AuthService {
   }
   logout() {
     this.loggedIn = false;
-    this.router.navigate(['/auth']);
+    this.router.navigate(['/login']);
     localStorage.removeItem('isLoggedIn');
   }
   constructor(private http: HttpClient, private router: Router) {}

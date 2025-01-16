@@ -17,10 +17,10 @@ export class UserComponent implements OnInit {
   chatMessages!: Message[];
   selectedUser!: UserProfile;
   currentUser!: UserProfile[];
-  mainUsers!: UserProfile[];
+  mainUsers: UserProfile[] = this.uService.users;
 
   ngOnInit(): void {
-    this.mainUsers = this.uService.users;
+    // this.mainUsers = this.uService.users;
     this.uService.nextUser.subscribe((value) => {
       // console.log(value);
       if (this.uService.nextUser.value) {

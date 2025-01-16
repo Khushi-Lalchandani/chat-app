@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   isPasswordVisible: boolean = false;
   error: string = '';
   form!: FormGroup;
+  submit() {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -29,17 +30,90 @@ export class LoginComponent implements OnInit {
   }
   onSubmit() {
     console.log(this.form);
-    console.log(this.isLoginMode);
 
     const value = this.form.value;
 
+    // if (this.isLoginMode) {
+    //   if (this.searchUser(value)) {
+    //     this.uService.nextUser.next(value);
+    //     console.log(value);
+    //     this.router.navigate(['/user'], { relativeTo: this.route });
+    //   }
+    // }
+
+    // if (this.isLoginMode) {
+    //   this.authService
+    //     .logInFirebase({
+    //       email: value.email,
+    //       password: value.password,
+    //     })
+
+    //     .subscribe(
+    //       (data) => {
+    //         this.error = '';
+    //         this.authService.loggedIn = true;
+    //       },
+    //       (error) => {
+    //         this.error = error.error.error.message;
+    //         this.router.navigate(['/login']);
+    //         console.log(error);
+    //       }
+    //     );
+    // } else {
+    //   this.authService
+    //     .signUpFirebase({
+    //       email: value.email,
+    //       password: value.password,
+    //     })
+    //     .subscribe(
+    //       (data) => {
+    //         this.authService
+    //           .signUp({
+    //             fname: value.fname,
+    //             lname: value.lname,
+    //             email: value.email,
+    //             password: value.password,
+    //           })
+    //           .subscribe((sample) => {
+    //             console.log(sample, 'added successfully');
+    //             window.location.reload();
+    //           });
+    //       },
+    //       (error) => {
+    //         if (error) {
+    //           this.error = error.error.error.message;
+    //           console.log(this.error);
+    //         }
+    //       }
+    //     );
+    // }
+
     if (this.isLoginMode) {
-      if (this.searchUser(value)) {
-        this.uService.nextUser.next(value);
-        console.log(value);
-        this.router.navigate(['/user'], { relativeTo: this.route });
-      }
+      this.authService
+        .logInFirebase({
+          email: value.email,
+          password: value.password,
+          returnSecureToken: true,
+        })
+        .subscribe((data) => {
+          this.error = '';
+          this.authService.loggedIn = true;
+          console.log('succesful', data);
+        });
+    } else {
+      this.authService
+        .signUpFirebase({
+          email: value.email,
+          password: value.password,
+          returnSecureToken: true,
+        })
+        .subscribe((data) => {
+          this.error = '';
+          this.authService.loggedIn = true;
+          console.log('signed up', data);
+        });
     }
+    this.form.reset();
   }
   searchUser(value: any) {
     return this.uService.users.some(
@@ -49,6 +123,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private uService: UserService,
+    private authService: AuthService,
     private route: ActivatedRoute
   ) {}
 }
