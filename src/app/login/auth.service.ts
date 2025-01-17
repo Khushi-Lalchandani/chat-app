@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, map } from 'rxjs';
+import { UserProfile } from '../user/user.model';
 
 export interface returnType {
   email: string;
@@ -57,5 +58,6 @@ export class AuthService {
   setUser(value: any) {
     this.nextUser.next(value);
   }
+
   constructor(private http: HttpClient, private router: Router) {}
 }

@@ -224,7 +224,7 @@ export class UserService {
         'https://chitchat-28450-default-rtdb.firebaseio.com/.json'
       )
       .subscribe((data: any) => {
-        const users = data['-OGizaTdmnpexuvBTvMw'];
+        const users = data;
         this.usersSubject.next(users);
       });
   }

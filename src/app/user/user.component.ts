@@ -20,15 +20,14 @@ export class UserComponent implements OnInit {
   selectedUser!: UserProfile;
   currentUser!: UserProfile[];
   mainUsers!: UserProfile[];
-  private mainUsersSubject = new BehaviorSubject<UserProfile[]>([]); // Initializes the subject with an empty array
-  mainUsers$ = this.mainUsersSubject.asObservable();
+  mainUsersChanged = new BehaviorSubject<boolean>(false);
 
   ngOnInit(): void {
     this.uService.getUsers();
-    // this.mainUsers$.subscribe((data) => {
-    //   this.uService.updateData(data);
-    // });
 
+    this.mainUsersChanged.subscribe((value) => {
+      console.log(value);
+    });
     this.uService.users$.subscribe((user) => {
       this.mainUsers = user;
       // console.log(this.mainUsers);
@@ -88,13 +87,13 @@ export class UserComponent implements OnInit {
     this.chatMessages = [...this.sentMessages, ...this.receivedMessages];
 
     this.chatMessages.sort((a, b) => a.time!.getTime() - b.time!.getTime());
-    console.log(this.chatMessages);
+    // console.log(this.chatMessages);
   }
 
   onSubmit() {
     if (this.message_form && this.selectedUser && this.currentUser) {
-      console.log(this.message_form.value.message);
-      console.log(this.selectedUser);
+      // console.log(this.message_form.value.message);
+      // console.log(this.selectedUser);
       this.appendMessage(this.message_form.value.message);
     }
     this.message_form.reset();
@@ -112,7 +111,7 @@ export class UserComponent implements OnInit {
           },
         ];
 
-        console.log(user);
+        // console.log(user);
       }
       if (user.email === this.selectedUser.email) {
         user.received = [
@@ -129,7 +128,12 @@ export class UserComponent implements OnInit {
       return user;
     });
     this.mainUsers = [...updatedUsers];
-    this.mainUsersSubject.next(this.mainUsers);
+    this.mainUsersChanged.next(true);
+    console.log(this.mainUsers);
+
+    // Update the data on firebase
+    this.uService.updateData(this.mainUsers);
+    this.uService.getUsers();
   }
   logout() {
     this.authService.logout();
