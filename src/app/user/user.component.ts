@@ -21,9 +21,14 @@ export class UserComponent implements OnInit {
   currentUser!: UserProfile[];
   mainUsers!: UserProfile[];
   mainUsersChanged = new BehaviorSubject<boolean>(false);
+  localStorageEmail!: string | null;
 
   ngOnInit(): void {
     this.uService.getUsers();
+    if (localStorage.getItem('user')) {
+      this.localStorageEmail = localStorage.getItem('user');
+    }
+    console.log(this.localStorageEmail);
 
     this.mainUsersChanged.subscribe((value) => {
       console.log(value);
@@ -32,7 +37,7 @@ export class UserComponent implements OnInit {
       this.mainUsers = user;
       // console.log(this.mainUsers);
       this.authService.nextUser.subscribe((value) => {
-        if (this.authService.nextUser.value) {
+        if (this.authService.nextUser.value || this.localStorageEmail) {
           this.currentUser = this.mainUsers.filter(
             (data) => data.email === value.email
           );
@@ -54,12 +59,13 @@ export class UserComponent implements OnInit {
 
   communicationHappened(user: UserProfile[]) {
     return user.filter((user) => {
+      if (!user.sent) user.sent = [];
       const hasSentMessage = user.sent.some(
-        (message) => message.email === this.authService.nextUser.value.email
+        (message) => message.email === this.localStorageEmail
       );
 
       const hasReceivedMessage = user.received?.some(
-        (message) => message.email === this.authService.nextUser.value.email
+        (message) => message.email === this.localStorageEmail
       );
       return hasReceivedMessage || hasSentMessage;
     });
@@ -68,25 +74,33 @@ export class UserComponent implements OnInit {
     this.receivedMessages = [];
     this.sentMessages = [];
     this.selectedUser = user;
+    if (this.localStorageEmail) {
+      if (!user.sent) {
+        user.sent = [];
+      }
+      if (!user.received) {
+        user.received = [];
+      }
 
-    user.sent.forEach((data) => {
-      if (data.email === this.authService.nextUser.value.email) {
-        data.messageReceived = true;
+      user.sent.forEach((data) => {
+        if (data.email === this.localStorageEmail) {
+          data.messageReceived = true;
+          data.time = new Date(data.time || Date.now());
+
+          this.receivedMessages.push(data);
+        }
+      });
+      user.received.forEach((data) => {
+        data.messageSent = true;
         data.time = new Date(data.time || Date.now());
+        if (data.email === this.localStorageEmail) {
+          this.sentMessages.push(data);
+        }
+      });
+      this.chatMessages = [...this.sentMessages, ...this.receivedMessages];
 
-        this.receivedMessages.push(data);
-      }
-    });
-    user.received.forEach((data) => {
-      data.messageSent = true;
-      data.time = new Date(data.time || Date.now());
-      if (data.email === this.authService.nextUser.value.email) {
-        this.sentMessages.push(data);
-      }
-    });
-    this.chatMessages = [...this.sentMessages, ...this.receivedMessages];
-
-    this.chatMessages.sort((a, b) => a.time!.getTime() - b.time!.getTime());
+      this.chatMessages.sort((a, b) => a.time!.getTime() - b.time!.getTime());
+    }
     // console.log(this.chatMessages);
   }
 
@@ -141,7 +155,7 @@ export class UserComponent implements OnInit {
 
   constructor(
     private uService: UserService,
-    private cdrRef: ChangeDetectorRef,
+
     private authService: AuthService
   ) {}
 }

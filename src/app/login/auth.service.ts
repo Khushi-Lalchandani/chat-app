@@ -40,23 +40,16 @@ export class AuthService {
     );
   }
 
-  private lStorage(): boolean {
-    return localStorage.getItem('isLoggedIn') === 'true';
-  }
-
-  isAuthenticated(): boolean {
-    localStorage.setItem('isLoggedIn', `${this.loggedIn}`);
-    return this.loggedIn;
-  }
   logout() {
     this.loggedIn = false;
+    localStorage.removeItem('user');
     this.router.navigate(['/login']);
-    localStorage.removeItem('isLoggedIn');
   }
-  nextUser = new BehaviorSubject<any>({ email: 'kl@gmail.com' });
+  nextUser = new BehaviorSubject<any>({ email: 'kl@gmail.com  ' });
 
   setUser(value: any) {
     this.nextUser.next(value);
+    localStorage.setItem('user', value.email);
   }
 
   constructor(private http: HttpClient, private router: Router) {}

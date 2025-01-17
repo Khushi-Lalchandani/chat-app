@@ -36,8 +36,7 @@ export class LoginComponent implements OnInit {
         .subscribe(
           (data) => {
             this.error = '';
-            this.authService.nextUser.next(value);
-
+            this.authService.setUser(value);
             this.authService.loggedIn = true;
             console.log('succesful', data);
             this.router.navigate(['/user'], { relativeTo: this.route });
@@ -56,8 +55,9 @@ export class LoginComponent implements OnInit {
             this.error = '';
             this.authService.loggedIn = true;
             console.log('signed up', data);
-            this.authService.nextUser.next(value);
+            this.authService.setUser(value);
 
+            this.authService.loggedIn = true;
             this.router.navigate(['/user'], { relativeTo: this.route });
           },
           (error) => {
