@@ -71,17 +71,16 @@ export class UserComponent implements OnInit {
     });
   }
   revealDetails(user: UserProfile) {
+    if (!this.localStorageEmail) {
+      return;
+    }
     this.receivedMessages = [];
     this.sentMessages = [];
     this.selectedUser = user;
+    console.log(this.selectedUser.sent, this.selectedUser.received);
     if (this.localStorageEmail) {
-      if (!user.sent) {
-        user.sent = [];
-      }
-      if (!user.received) {
-        user.received = [];
-      }
-
+      user.sent = user.sent || [];
+      user.received = user.received || [];
       user.sent.forEach((data) => {
         if (data.email === this.localStorageEmail) {
           data.messageReceived = true;
@@ -97,22 +96,25 @@ export class UserComponent implements OnInit {
           this.sentMessages.push(data);
         }
       });
+
       this.chatMessages = [...this.sentMessages, ...this.receivedMessages];
 
       this.chatMessages.sort((a, b) => a.time!.getTime() - b.time!.getTime());
     }
-    // console.log(this.chatMessages);
   }
 
   onSubmit() {
     if (this.message_form && this.selectedUser && this.currentUser) {
-      // console.log(this.message_form.value.message);
-      // console.log(this.selectedUser);
       this.appendMessage(this.message_form.value.message);
     }
     this.message_form.reset();
   }
   appendMessage(message: string) {
+    if (!this.currentUser || this.currentUser.length === 0) {
+      this.currentUser = this.mainUsers.filter(
+        (data) => data.email === this.localStorageEmail
+      );
+    }
     const updatedUsers = this.mainUsers.map((user) => {
       if (user.email === this.currentUser[0].email) {
         user.sent = [
@@ -143,7 +145,6 @@ export class UserComponent implements OnInit {
     });
     this.mainUsers = [...updatedUsers];
     this.mainUsersChanged.next(true);
-    console.log(this.mainUsers);
 
     // Update the data on firebase
     this.uService.updateData(this.mainUsers);

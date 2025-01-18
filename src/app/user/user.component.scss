@@ -28,6 +28,10 @@
 
     grid-row: 2/3;
     overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
   &_window {
     grid-column: 2/3;
