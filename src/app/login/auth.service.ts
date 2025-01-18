@@ -15,9 +15,8 @@ export interface returnType {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  loggedIn: boolean = false;
   tokenExpirationTimer: any;
-  userLoggedIn = new BehaviorSubject<any>(null);
+  // userLoggedIn = new BehaviorSubject<any>(null);
 
   signUpFirebase(
     email: string,
@@ -41,15 +40,17 @@ export class AuthService {
   }
 
   logout() {
-    this.loggedIn = false;
     localStorage.removeItem('user');
+    localStorage.removeItem('isLoggedIn');
+
     this.router.navigate(['/login']);
   }
   nextUser = new BehaviorSubject<any>({ email: 'kl@gmail.com  ' });
 
-  setUser(value: any) {
+  setUser(value: any, login: string) {
     this.nextUser.next(value);
     localStorage.setItem('user', value.email);
+    localStorage.setItem('isLoggedIn', login);
   }
 
   constructor(private http: HttpClient, private router: Router) {}

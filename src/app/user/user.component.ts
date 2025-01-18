@@ -22,27 +22,31 @@ export class UserComponent implements OnInit {
   mainUsers!: UserProfile[];
   mainUsersChanged = new BehaviorSubject<boolean>(false);
   localStorageEmail!: string | null;
+  showAllContacts: boolean = false;
+  isLoggedIn!: string | null;
 
   ngOnInit(): void {
     this.uService.getUsers();
+    this.isLoggedIn = localStorage.getItem('isLoggedIn');
     if (localStorage.getItem('user')) {
       this.localStorageEmail = localStorage.getItem('user');
     }
-    console.log(this.localStorageEmail);
+    // console.log(this.localStorageEmail);
 
     this.mainUsersChanged.subscribe((value) => {
       console.log(value);
     });
     this.uService.users$.subscribe((user) => {
       this.mainUsers = user;
-      // console.log(this.mainUsers);
+
       this.authService.nextUser.subscribe((value) => {
         if (this.authService.nextUser.value || this.localStorageEmail) {
           this.currentUser = this.mainUsers.filter(
-            (data) => data.email === value.email
+            (data) => data.email === this.localStorageEmail
           );
+
           this.userDetails = this.mainUsers.filter(
-            (data) => data.email !== value.email
+            (data) => data.email !== this.localStorageEmail
           );
           this.showUsers = this.communicationHappened(this.userDetails);
         }
@@ -77,7 +81,7 @@ export class UserComponent implements OnInit {
     this.receivedMessages = [];
     this.sentMessages = [];
     this.selectedUser = user;
-    console.log(this.selectedUser.sent, this.selectedUser.received);
+    // console.log(this.selectedUser.sent, this.selectedUser.received);
     if (this.localStorageEmail) {
       user.sent = user.sent || [];
       user.received = user.received || [];
@@ -153,7 +157,10 @@ export class UserComponent implements OnInit {
   logout() {
     this.authService.logout();
   }
-
+  showAllUsers() {
+    console.log(this.userDetails, this.mainUsers);
+    this.showAllContacts = true;
+  }
   constructor(
     private uService: UserService,
 
